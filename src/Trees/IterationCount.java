@@ -1,10 +1,12 @@
 package Trees;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.TreeSet;
 
 /**
  * @author Dilip
@@ -16,14 +18,24 @@ import java.util.Queue;
 public class IterationCount {
 	HashMap<String, Node> allNodes = new HashMap<>();
 
-	Node head;
+	static Node head;
 
-	class Node {
+	class Node implements Comparable<Node>{
 		String data;
 		List<Node> children = new LinkedList<>();
-
+		TreeSet<Node> child= new TreeSet<>();
+		int iterationCount;
 		Node(String data) {
 			this.data = data;
+		}
+		/* (non-Javadoc)
+		 * @see java.lang.Comparable#compareTo(java.lang.Object)
+		 */
+		@Override
+		public int compareTo(Node o) {
+			Node tempNode= o;
+			return Integer.compare(iterationCount, tempNode.iterationCount);
+			// TODO Auto-generated method stub
 		}
 
 	}
@@ -51,8 +63,10 @@ public class IterationCount {
 				allNodes.put(data, temp);
 			}
 			childNodes.add(temp);
+			
 		}
 		currentNode.children.addAll(childNodes);
+		currentNode.child.addAll(childNodes);
 	}
 
 	public void printTree(int height) {
@@ -75,15 +89,9 @@ public class IterationCount {
 			}
 		}
 	}
-	int maxIterations=0;
 	HashMap<Node, Integer> countItr= new HashMap<>();
-	public int getIterationCount(){
-		
-		return 0;
-	}
 	
-	
-	public static void main(String args[]) {
+	public static void setInput(){
 		IterationCount ic = new IterationCount();
 		List<String> children = new LinkedList<>();
 		String input[] = { "b", "c", "d", "e", "f", "g" };
@@ -132,5 +140,29 @@ public class IterationCount {
 		for (int i = 0; i < input1.length; i++) {
 			children.add(input1[i]);
 		}
+		int iterations=ic.getIterationCount(head);
+		System.out.println(iterations);
+	}
+	public Integer getIterationCount(Node n){
+		
+		List<Node> children= n.children;
+		Iterator<Node> itr= children.iterator();
+		int max=0;
+		int tempMax=0;
+		///SHOULD SORT THE CHILDREN BEFORE DOING THIS
+		for(int i=0; i<children.size(); i++){
+			 tempMax= 1+i+ getIterationCount(itr.next());
+			 if(tempMax>max){
+				 max=tempMax;
+			 }
+		}
+		
+		n.iterationCount=max;
+		return max;
+	}
+	
+	public static void main(String args[]) {
+		setInput();
+		
 	}
 }
