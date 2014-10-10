@@ -15,15 +15,9 @@ public class TestHeapify {
 		}
 		int left= (2*start)+1;
 		int right= (2*start)+2;
-		int leftFlag=0;
-		int rightFlag=0;
-		if(left<len){
-			leftFlag=1;
-		}
-		if(right<len){
-			rightFlag=1;
-		}
-		if(leftFlag==1 && rightFlag==1){
+		
+		
+		if(left<len && right<len){
 			if(a[start]<a[left] && a[start]<a[right]){
 				return a;
 			}
@@ -38,10 +32,10 @@ public class TestHeapify {
 					a= swap(a,start,right);
 					minIndex=right;
 				}
-				 heapify(a,minIndex,len);
+				a= heapify(a,minIndex,len);
 			}
 		}
-		else if(leftFlag==1){
+		else if(left<len){
 			if(a[start]<a[left]){
 				return a;
 			}
